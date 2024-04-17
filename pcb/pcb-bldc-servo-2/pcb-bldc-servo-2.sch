@@ -10408,6 +10408,7 @@ by exp-lbrs.ulp</description>
 <part name="TP3" library="ftobler_backup" deviceset="TESTPIN" device="1MM"/>
 <part name="TP4" library="ftobler_backup" deviceset="TESTPIN" device="1MM"/>
 <part name="GND29" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="+3V13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -10760,6 +10761,9 @@ parallel.</text>
 <instance part="GND29" gate="1" x="299.72" y="154.94" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="302.26" y="152.4" size="1.778" layer="96" rot="MR0"/>
 </instance>
+<instance part="+3V13" gate="G$1" x="266.7" y="215.9" smashed="yes" rot="MR0">
+<attribute name="VALUE" x="269.24" y="210.82" size="1.778" layer="96" rot="MR90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -10844,11 +10848,7 @@ parallel.</text>
 <pinref part="GND19" gate="1" pin="GND"/>
 <pinref part="U5" gate="G$1" pin="DIR"/>
 <wire x1="261.62" y1="210.82" x2="264.16" y2="210.82" width="0.1524" layer="91"/>
-<pinref part="U5" gate="G$1" pin="PGO"/>
-<wire x1="261.62" y1="203.2" x2="264.16" y2="203.2" width="0.1524" layer="91"/>
-<wire x1="264.16" y1="203.2" x2="264.16" y2="210.82" width="0.1524" layer="91"/>
-<junction x="264.16" y="203.2"/>
-<wire x1="264.16" y1="203.2" x2="264.16" y2="195.58" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="210.82" x2="264.16" y2="195.58" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C15" gate="G$1" pin="2"/>
@@ -11120,6 +11120,12 @@ parallel.</text>
 <pinref part="+3V12" gate="G$1" pin="+3V3"/>
 <wire x1="200.66" y1="43.18" x2="200.66" y2="50.8" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="U5" gate="G$1" pin="PGO"/>
+<wire x1="261.62" y1="203.2" x2="266.7" y2="203.2" width="0.1524" layer="91"/>
+<pinref part="+3V13" gate="G$1" pin="+3V3"/>
+<wire x1="266.7" y1="203.2" x2="266.7" y2="213.36" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="N$3" class="0">
 <segment>
@@ -11249,8 +11255,8 @@ parallel.</text>
 <net name="MAG_SCL" class="0">
 <segment>
 <pinref part="U5" gate="G$1" pin="SCL"/>
-<wire x1="261.62" y1="208.28" x2="279.4" y2="208.28" width="0.1524" layer="91"/>
-<label x="266.7" y="208.28" size="1.778" layer="95"/>
+<wire x1="261.62" y1="208.28" x2="284.48" y2="208.28" width="0.1524" layer="91"/>
+<label x="271.78" y="208.28" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="PB7/PB8"/>
@@ -11261,8 +11267,8 @@ parallel.</text>
 <net name="MAG_SDA" class="0">
 <segment>
 <pinref part="U5" gate="G$1" pin="SDA"/>
-<wire x1="261.62" y1="205.74" x2="279.4" y2="205.74" width="0.1524" layer="91"/>
-<label x="266.7" y="205.74" size="1.778" layer="95"/>
+<wire x1="261.62" y1="205.74" x2="284.48" y2="205.74" width="0.1524" layer="91"/>
+<label x="271.78" y="205.74" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="PB9/PC14-OSC32_IN"/>

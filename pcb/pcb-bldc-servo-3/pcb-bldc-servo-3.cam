@@ -132,6 +132,7 @@
                     },
                     "filename_format": "%PREFIX/profile.gbr",
                     "layers": [
+                        46
                     ],
                     "milling": true,
                     "polarity": "positive",
@@ -323,7 +324,7 @@
             ]
         }
     ],
-    "timestamp": "2024-04-01T21:22:36",
+    "timestamp": "2024-04-06T23:43:48",
     "type": "EAGLE CAM job",
     "units": "metric",
     "version": "9.2.0"
