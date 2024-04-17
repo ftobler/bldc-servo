@@ -192,7 +192,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_12CYCLES_5;
   hadc1.Init.SamplingTimeCommon2 = ADC_SAMPLETIME_12CYCLES_5;
@@ -237,7 +237,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x00602173;
+  hi2c1.Init.Timing = 0x10707DBC;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;

@@ -11,7 +11,8 @@
 #include "main.h"
 
 enum {
-	N = 256
+	N = 256,
+   AS5600L_ADDR = 0x80
 };
 
 constexpr uint16_t sintab[N+1] = {0, 402, 804, 1206, 1608, 2010, 2412, 2813, 3215, 3617, 4018, 4419, 4821, 5221, 5622, 6023, 6423,
@@ -41,7 +42,7 @@ extern TIM_HandleTypeDef htim3;
 
 static int32_t sine(uint32_t w);
 volatile static int32_t amplitude = 200;
-volatile static int32_t speed = 1;
+volatile static int32_t speed = 2000;
 //volatile static int32_t gpio_a_idr = 0;
 
 volatile uint16_t sens1_last = 0;
@@ -54,6 +55,11 @@ volatile uint16_t sens1_off = 0;
 volatile uint16_t sens2_off = 0;
 volatile uint16_t sens3_off = 0;
 volatile uint16_t commutation_debug = 0;
+volatile uint32_t angle = 0;
+volatile uint32_t angle_target = 500;
+
+uint8_t received[2] = {0};
+uint32_t adc_dma_results[5];
 
 
 void application_setup() {
@@ -68,6 +74,9 @@ void application_setup() {
 	htim3.Instance->CCR3 = 0;
 
 	SKIP_GPIO_Port->BSRR = SKIP_Pin;
+
+
+	HAL_ADC_Start_DMA(&hadc1, adc_dma_results, 5);
 }
 
 void application_loop() {
@@ -114,14 +123,22 @@ void application_loop() {
 	commutation_debug = commutation;
 	commutation = -commutation;
 
+	int32_t error = angle_target - adc_dma_results[0];
 
-	uint32_t block = 0;
-	if (speed > 0) {
-		block = amplitude * speed;
+
+	int32_t block = 0;
+	if (error > 0) {
+		block = -error * speed / 256;
 		commutation = (commutation + 10) % 6; //forward
 	} else {
-		block = amplitude * -speed;
+		block = error * speed / 256;
 	    commutation = (commutation + 7) % 6; //reverse
+	}
+	if (block > 2047) {
+		block = 2047;
+	}
+	if (block < -2047) {
+		block = -2047;
 	}
 	switch (commutation) {
 	case 0:
@@ -155,6 +172,22 @@ void application_loop() {
 		htim3.Instance->CCR3 = 2048 + block;
 		break;
 	}
+
+//	HAL_I2C_Mem_Read(&hi2c1, AS5600L_ADDR, 0x0C, I2C_MEMADD_SIZE_8BIT, received, 2, 3);
+//	angle = received[1] + ((uint16_t)received[0] << 8);
+
+//	uint32_t t = uwTick % 8192;
+//	if (t < 1000) {
+//		angle_target = 1000;
+//	} else if (t > 7500) {
+//		angle_target = 15000;
+//	} else {
+//		angle_target = t * 2;
+//	}
+
+	angle_target = 7500 + sine(uwTick / 4) * 5000 / 0xFFFF;
+//	if (angle_target < 1000) angle_target = 1000;
+//	if (angle_target > 15000) angle_target = 15000;
 
 
 //	gpio_a_idr = GPIOA->IDR;
