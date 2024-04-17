@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx_hal.h"
+#include "stm32g0xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -59,32 +59,19 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define ADC_ENCODER_Pin GPIO_PIN_1
-#define ADC_ENCODER_GPIO_Port GPIOA
-#define ADC_VOLT_Pin GPIO_PIN_2
-#define ADC_VOLT_GPIO_Port GPIOA
-#define ADC_I1_Pin GPIO_PIN_4
-#define ADC_I1_GPIO_Port GPIOA
-#define ADC_I2_Pin GPIO_PIN_5
-#define ADC_I2_GPIO_Port GPIOA
-#define ADC_I3_Pin GPIO_PIN_6
-#define ADC_I3_GPIO_Port GPIOA
-#define NSLEEP_Pin GPIO_PIN_12
-#define NSLEEP_GPIO_Port GPIOB
-#define NFAULT_Pin GPIO_PIN_13
-#define NFAULT_GPIO_Port GPIOB
-#define LED3_Pin GPIO_PIN_15
-#define LED3_GPIO_Port GPIOB
-#define LED2_Pin GPIO_PIN_8
-#define LED2_GPIO_Port GPIOA
-#define LED1_Pin GPIO_PIN_9
-#define LED1_GPIO_Port GPIOA
-#define EN_Pin GPIO_PIN_10
-#define EN_GPIO_Port GPIOA
-#define DIR_Pin GPIO_PIN_11
-#define DIR_GPIO_Port GPIOA
-#define STEP_Pin GPIO_PIN_12
-#define STEP_GPIO_Port GPIOA
+#define ADC1_IN0_MAG_POS_Pin GPIO_PIN_0
+#define ADC1_IN0_MAG_POS_GPIO_Port GPIOA
+#define SENS3_Pin GPIO_PIN_4
+#define SENS3_GPIO_Port GPIOA
+#define SENS2_Pin GPIO_PIN_5
+#define SENS2_GPIO_Port GPIOA
+#define SENS1_Pin GPIO_PIN_11
+#define SENS1_GPIO_Port GPIOA
+#define SKIP_Pin GPIO_PIN_12
+#define SKIP_GPIO_Port GPIOA
+#define LED_Pin GPIO_PIN_3
+#define LED_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
