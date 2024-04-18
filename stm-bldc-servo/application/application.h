@@ -14,6 +14,7 @@ extern "C" {
 
 void application_setup();
 void application_loop();
+void control_loop();
 
 #ifdef __cplusplus
 }

@@ -45,26 +45,31 @@ volatile static int32_t amplitude = 200;
 volatile static int32_t speed = 2000;
 //volatile static int32_t gpio_a_idr = 0;
 
-volatile uint16_t sens1_last = 0;
-volatile uint16_t sens2_last = 0;
-volatile uint16_t sens3_last = 0;
-volatile uint16_t sens1_on = 0;
-volatile uint16_t sens2_on = 0;
-volatile uint16_t sens3_on = 0;
-volatile uint16_t sens1_off = 0;
-volatile uint16_t sens2_off = 0;
-volatile uint16_t sens3_off = 0;
+//volatile uint16_t sens1_last = 0;
+//volatile uint16_t sens2_last = 0;
+//volatile uint16_t sens3_last = 0;
+//volatile uint16_t sens1_on = 0;
+//volatile uint16_t sens2_on = 0;
+//volatile uint16_t sens3_on = 0;
+//volatile uint16_t sens1_off = 0;
+//volatile uint16_t sens2_off = 0;
+//volatile uint16_t sens3_off = 0;
 volatile uint16_t commutation_debug = 0;
 volatile uint32_t angle = 0;
+volatile uint32_t i2c_angle = 0;
 volatile uint32_t angle_target = 500;
+volatile int32_t controlsignal = 0;
 
 uint8_t received[2] = {0};
 uint32_t adc_dma_results[5];
 
+volatile uint32_t perf_loop = 0;
+volatile uint32_t perf_control = 0;
+
 
 void application_setup() {
 
-	HAL_TIM_Base_Start(&htim3);
+	HAL_TIM_Base_Start_IT(&htim3);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
@@ -76,11 +81,11 @@ void application_setup() {
 	SKIP_GPIO_Port->BSRR = SKIP_Pin;
 
 
-	HAL_ADC_Start_DMA(&hadc1, adc_dma_results, 5);
+	HAL_ADC_Start_DMA(&hadc1, adc_dma_results, 1);
 }
 
 void application_loop() {
-	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, (GPIO_PinState)((uwTick % 500) > 250));
+	perf_loop++;
 //	HAL_GPIO_WritePin(SKIP_GPIO_Port, SKIP_Pin, (GPIO_PinState)((uwTick % 1000) > 500));
 
 //	htim3.Instance->CCR1 = 2048 + sine(uwTick*speed/4      ) * amplitude / 0xFFFF;
@@ -91,28 +96,28 @@ void application_loop() {
 	uint16_t sens2 = GPIOA->IDR & SENS2_Pin;
 	uint16_t sens3 = GPIOA->IDR & SENS3_Pin;
 
-	uint32_t index = (uwTick*speed) % 1024;
-	if (sens1 && sens1_last == 0) {
-		sens1_on = index;
-	}
-	if (sens1 == 0 && sens1_last) {
-		sens1_off = index;
-	}
-	if (sens2 && sens2_last == 0) {
-		sens2_on = index;
-	}
-	if (sens2 == 0 && sens2_last) {
-		sens2_off = index;
-	}
-	if (sens3 && sens3_last == 0) {
-		sens3_on = index;
-	}
-	if (sens3 == 0 && sens3_last) {
-		sens3_off = index;
-	}
-	sens1_last = sens1;
-	sens2_last = sens2;
-	sens3_last = sens3;
+//	uint32_t index = (uwTick*speed) % 1024;
+//	if (sens1 && sens1_last == 0) {
+//		sens1_on = index;
+//	}
+//	if (sens1 == 0 && sens1_last) {
+//		sens1_off = index;
+//	}
+//	if (sens2 && sens2_last == 0) {
+//		sens2_on = index;
+//	}
+//	if (sens2 == 0 && sens2_last) {
+//		sens2_off = index;
+//	}
+//	if (sens3 && sens3_last == 0) {
+//		sens3_on = index;
+//	}
+//	if (sens3 == 0 && sens3_last) {
+//		sens3_off = index;
+//	}
+//	sens1_last = sens1;
+//	sens2_last = sens2;
+//	sens3_last = sens3;
 	int32_t commutation = 0;
 	if (sens1==0 && sens2==0 && sens3   ) commutation = 0;
 	if (sens1==0 && sens2    && sens3   ) commutation = 1;
@@ -123,15 +128,15 @@ void application_loop() {
 	commutation_debug = commutation;
 	commutation = -commutation;
 
-	int32_t error = angle_target - adc_dma_results[0];
+
 
 
 	int32_t block = 0;
-	if (error > 0) {
-		block = -error * speed / 256;
+	if (controlsignal > 0) {
+		block = -controlsignal;
 		commutation = (commutation + 10) % 6; //forward
 	} else {
-		block = error * speed / 256;
+		block = controlsignal;
 	    commutation = (commutation + 7) % 6; //reverse
 	}
 	if (block > 2047) {
@@ -173,8 +178,8 @@ void application_loop() {
 		break;
 	}
 
-//	HAL_I2C_Mem_Read(&hi2c1, AS5600L_ADDR, 0x0C, I2C_MEMADD_SIZE_8BIT, received, 2, 3);
-//	angle = received[1] + ((uint16_t)received[0] << 8);
+//	HAL_I2C_Mem_Read(&hi2c1, AS5600L_ADDR, 0x0C, I2C_MEMADD_SIZE_8BIT, received, 2, 100);
+//	i2c_angle = received[1] + ((uint16_t)received[0] << 8);
 
 //	uint32_t t = uwTick % 8192;
 //	if (t < 1000) {
@@ -185,13 +190,47 @@ void application_loop() {
 //		angle_target = t * 2;
 //	}
 
-	angle_target = 7500 + sine(uwTick / 4) * 5000 / 0xFFFF;
+//	angle_target = 7500 + sine(uwTick / 4) * 5000 / 0xFFFF;
 //	if (angle_target < 1000) angle_target = 1000;
 //	if (angle_target > 15000) angle_target = 15000;
 
 
 //	gpio_a_idr = GPIOA->IDR;
 //	halltab[(uwTick*speed) % 1024] = (sens1 ? 0x01 : 0) | (sens2 ? 0x02 : 0) | (sens3 ? 0x04 : 0);
+}
+
+static volatile int32_t integrator = 0;
+static volatile int32_t integrator_max = 5000;
+static volatile int32_t controller_p = 3;
+static volatile int32_t controller_i = 20;
+static volatile int32_t error_trace = 0;
+static volatile int32_t target_smooth = 1;
+static volatile int32_t angle_target_smooth = 1;
+
+void control_loop() {
+	int32_t target_error = angle_target * 2 - angle_target_smooth;
+	if (target_error > target_smooth) {
+		target_error = target_smooth;
+	}
+	if (target_error < -target_smooth) {
+		target_error = -target_smooth;
+	}
+	angle_target_smooth += target_error;
+
+	perf_control++;
+	int32_t error = angle_target_smooth / 2 - adc_dma_results[0];
+	integrator += error;
+	if (integrator > integrator_max) {
+		integrator = integrator_max;
+	}
+	if (integrator < -integrator_max) {
+		integrator = -integrator_max;
+	}
+
+	controlsignal  = error * controller_p + integrator * controller_i / 2048;
+
+
+	error_trace = (error_trace +  error * error) * 255 / 256;
 }
 
 
