@@ -158,9 +158,9 @@ __attribute__((optimize("Ofast"))) void control_loop() {
 	//calculate the distance to target position
 	float disttogo = angle_target - angle_target_smooth;
 
-	//calculate the maximum velocity fot distance to target. We don't want to be
-	//faster or braking will become an issue
-	//make this square to not need to calculate squareroot
+	//calculate the maximum velocity for distance to target. We don't want to be
+	//faster or braking will become an issue.
+	//Make this square to not need to calculate squareroot.
 	float max_velocity_sq = (2 * acceleration * disttogo);
 
 	//need to decide from which direction we make our ramps
