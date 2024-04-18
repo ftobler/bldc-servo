@@ -166,13 +166,13 @@ __attribute__((optimize("Ofast"))) void control_loop() {
 	//need to decide from which direction we make our ramps
 	if (max_velocity_sq >= 0) {
 		//forward direction
-	    if (max_velocity_sq >= velocity*velocity) {
-	        //accelerate
-	        if (velocity < velocity_max) {
-	        	velocity += acceleration;
-	        }
-	    } else {
-	        //de-accelerate
+		if (max_velocity_sq >= velocity*velocity) {
+			//accelerate
+			if (velocity < velocity_max) {
+				velocity += acceleration;
+			}
+		} else {
+			//de-accelerate
 			if (velocity > 0) {
 				velocity -= acceleration;
 			} else {
@@ -195,7 +195,7 @@ __attribute__((optimize("Ofast"))) void control_loop() {
 			}
 		}
 	}
-    angle_target_smooth += velocity;
+	angle_target_smooth += velocity;
 
 
 	int32_t error = angle_target_smooth - adc_dma_results[0];
