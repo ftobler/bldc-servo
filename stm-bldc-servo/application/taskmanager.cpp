@@ -10,6 +10,7 @@
 #include "stm32hal.h"
 #include "application.h"
 #include "main.h"
+#include "stdlib.h"
 
 
 enum {
@@ -60,12 +61,15 @@ static void communication_task_fn() {
 }
 
 static void controller_task_fn() {
+	srand(0);
 	while (1) {
 		scheduler_task_sleep(2000);
-		if (enable_automatic) {
-			angle_target = 1000;
-			scheduler_task_sleep(2000);
-			angle_target = 10000;
+		if (enable_automatic || 1) {
+//			angle_target = 1000;
+			angle_target = 500 + rand() / 143165;
+			scheduler_task_sleep(1000);
+			angle_target = 500 + rand() / 143165;
+//			angle_target = 10000;
 		}
 	}
 }

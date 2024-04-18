@@ -9,10 +9,14 @@
 #include "application.h"
 #include "stm32hal.h"
 #include "main.h"
+#include "flortos.h"
 
 enum {
 	N = 256,
-   AS5600L_ADDR = 0x80
+   AS5600L_ADDR = 0x80,
+
+   PWM_MID = 1600,
+   AMP_MAX = 1550,
 };
 
 constexpr uint16_t sintab[N+1] = {0, 402, 804, 1206, 1608, 2010, 2412, 2813, 3215, 3617, 4018, 4419, 4821, 5221, 5622, 6023, 6423,
@@ -41,31 +45,27 @@ extern I2C_HandleTypeDef hi2c1;
 extern TIM_HandleTypeDef htim3;
 
 static int32_t sine(uint32_t w);
-volatile static int32_t amplitude = 200;
-volatile static int32_t speed = 2000;
-//volatile static int32_t gpio_a_idr = 0;
 
-//volatile uint16_t sens1_last = 0;
-//volatile uint16_t sens2_last = 0;
-//volatile uint16_t sens3_last = 0;
-//volatile uint16_t sens1_on = 0;
-//volatile uint16_t sens2_on = 0;
-//volatile uint16_t sens3_on = 0;
-//volatile uint16_t sens1_off = 0;
-//volatile uint16_t sens2_off = 0;
-//volatile uint16_t sens3_off = 0;
 volatile uint16_t commutation_debug = 0;
-volatile uint32_t angle = 0;
-volatile uint32_t i2c_angle = 0;
 volatile uint32_t angle_target = 500;
 volatile int32_t controlsignal = 0;
 
-uint8_t received[2] = {0};
-uint32_t adc_dma_results[5];
+//uint8_t received[2] = {0};
+uint32_t adc_dma_results[1];
 
 volatile uint32_t perf_loop = 0;
-volatile uint32_t perf_control = 0;
 
+
+
+static volatile int32_t integrator = 0;
+static volatile int32_t integrator_max = 5000;
+static volatile int32_t controller_p = 3;
+static volatile int32_t controller_i = 15;
+static volatile int32_t error_trace = 0;
+static volatile float angle_target_smooth = 0;
+static volatile float acceleration = 0.0002f;
+static volatile float velocity = 0.0f;
+static volatile float velocity_max = 0.7f;
 
 void application_setup() {
 
@@ -82,42 +82,18 @@ void application_setup() {
 
 
 	HAL_ADC_Start_DMA(&hadc1, adc_dma_results, 1);
+
+	scheduler_task_sleep(5);
+	angle_target_smooth = adc_dma_results[0];
 }
 
-void application_loop() {
+__attribute__((optimize("Ofast"))) void application_loop() {
 	perf_loop++;
-//	HAL_GPIO_WritePin(SKIP_GPIO_Port, SKIP_Pin, (GPIO_PinState)((uwTick % 1000) > 500));
-
-//	htim3.Instance->CCR1 = 2048 + sine(uwTick*speed/4      ) * amplitude / 0xFFFF;
-//	htim3.Instance->CCR2 = 2048 + sine(uwTick*speed/4 + 341) * amplitude / 0xFFFF;
-//	htim3.Instance->CCR3 = 2048 + sine(uwTick*speed/4 + 683) * amplitude / 0xFFFF;
 
 	uint16_t sens1 = GPIOA->IDR & SENS1_Pin;
 	uint16_t sens2 = GPIOA->IDR & SENS2_Pin;
 	uint16_t sens3 = GPIOA->IDR & SENS3_Pin;
 
-//	uint32_t index = (uwTick*speed) % 1024;
-//	if (sens1 && sens1_last == 0) {
-//		sens1_on = index;
-//	}
-//	if (sens1 == 0 && sens1_last) {
-//		sens1_off = index;
-//	}
-//	if (sens2 && sens2_last == 0) {
-//		sens2_on = index;
-//	}
-//	if (sens2 == 0 && sens2_last) {
-//		sens2_off = index;
-//	}
-//	if (sens3 && sens3_last == 0) {
-//		sens3_on = index;
-//	}
-//	if (sens3 == 0 && sens3_last) {
-//		sens3_off = index;
-//	}
-//	sens1_last = sens1;
-//	sens2_last = sens2;
-//	sens3_last = sens3;
 	int32_t commutation = 0;
 	if (sens1==0 && sens2==0 && sens3   ) commutation = 0;
 	if (sens1==0 && sens2    && sens3   ) commutation = 1;
@@ -128,9 +104,6 @@ void application_loop() {
 	commutation_debug = commutation;
 	commutation = -commutation;
 
-
-
-
 	int32_t block = 0;
 	if (controlsignal > 0) {
 		block = -controlsignal;
@@ -139,86 +112,93 @@ void application_loop() {
 		block = controlsignal;
 	    commutation = (commutation + 7) % 6; //reverse
 	}
-	if (block > 2047) {
-		block = 2047;
+	if (block > AMP_MAX) {
+		block = AMP_MAX;
 	}
-	if (block < -2047) {
-		block = -2047;
+	if (block < -AMP_MAX) {
+		block = -AMP_MAX;
 	}
 	switch (commutation) {
 	case 0:
-		htim3.Instance->CCR1 = 2048 + 0;
-		htim3.Instance->CCR2 = 2048 - block;
-		htim3.Instance->CCR3 = 2048 + block;
+		htim3.Instance->CCR1 = PWM_MID + 0;
+		htim3.Instance->CCR2 = PWM_MID - block;
+		htim3.Instance->CCR3 = PWM_MID + block;
 		break;
 	case 1:
-		htim3.Instance->CCR1 = 2048 + block;
-		htim3.Instance->CCR2 = 2048 - block;
-		htim3.Instance->CCR3 = 2048 + 0;
+		htim3.Instance->CCR1 = PWM_MID + block;
+		htim3.Instance->CCR2 = PWM_MID - block;
+		htim3.Instance->CCR3 = PWM_MID + 0;
 		break;
 	case 2:
-		htim3.Instance->CCR1 = 2048 + block;
-		htim3.Instance->CCR2 = 2048 + 0;
-		htim3.Instance->CCR3 = 2048 - block;
+		htim3.Instance->CCR1 = PWM_MID + block;
+		htim3.Instance->CCR2 = PWM_MID + 0;
+		htim3.Instance->CCR3 = PWM_MID - block;
 		break;
 	case 3:
-		htim3.Instance->CCR1 = 2048 + 0;
-		htim3.Instance->CCR2 = 2048 + block;
-		htim3.Instance->CCR3 = 2048 - block;
+		htim3.Instance->CCR1 = PWM_MID + 0;
+		htim3.Instance->CCR2 = PWM_MID + block;
+		htim3.Instance->CCR3 = PWM_MID - block;
 		break;
 	case 4:
-		htim3.Instance->CCR1 = 2048 - block;
-		htim3.Instance->CCR2 = 2048 + block;
-		htim3.Instance->CCR3 = 2048 + 0;
+		htim3.Instance->CCR1 = PWM_MID - block;
+		htim3.Instance->CCR2 = PWM_MID + block;
+		htim3.Instance->CCR3 = PWM_MID + 0;
 		break;
 	case 5:
-		htim3.Instance->CCR1 = 2048 - block;
-		htim3.Instance->CCR2 = 2048 + 0;
-		htim3.Instance->CCR3 = 2048 + block;
+		htim3.Instance->CCR1 = PWM_MID - block;
+		htim3.Instance->CCR2 = PWM_MID + 0;
+		htim3.Instance->CCR3 = PWM_MID + block;
 		break;
 	}
 
-//	HAL_I2C_Mem_Read(&hi2c1, AS5600L_ADDR, 0x0C, I2C_MEMADD_SIZE_8BIT, received, 2, 100);
-//	i2c_angle = received[1] + ((uint16_t)received[0] << 8);
-
-//	uint32_t t = uwTick % 8192;
-//	if (t < 1000) {
-//		angle_target = 1000;
-//	} else if (t > 7500) {
-//		angle_target = 15000;
-//	} else {
-//		angle_target = t * 2;
-//	}
-
-//	angle_target = 7500 + sine(uwTick / 4) * 5000 / 0xFFFF;
-//	if (angle_target < 1000) angle_target = 1000;
-//	if (angle_target > 15000) angle_target = 15000;
-
-
-//	gpio_a_idr = GPIOA->IDR;
-//	halltab[(uwTick*speed) % 1024] = (sens1 ? 0x01 : 0) | (sens2 ? 0x02 : 0) | (sens3 ? 0x04 : 0);
 }
 
-static volatile int32_t integrator = 0;
-static volatile int32_t integrator_max = 5000;
-static volatile int32_t controller_p = 3;
-static volatile int32_t controller_i = 20;
-static volatile int32_t error_trace = 0;
-static volatile int32_t target_smooth = 1;
-static volatile int32_t angle_target_smooth = 1;
 
-void control_loop() {
-	int32_t target_error = angle_target * 2 - angle_target_smooth;
-	if (target_error > target_smooth) {
-		target_error = target_smooth;
-	}
-	if (target_error < -target_smooth) {
-		target_error = -target_smooth;
-	}
-	angle_target_smooth += target_error;
+__attribute__((optimize("Ofast"))) void control_loop() {
+	//calculate the distance to target position
+	float disttogo = angle_target - angle_target_smooth;
 
-	perf_control++;
-	int32_t error = angle_target_smooth / 2 - adc_dma_results[0];
+	//calculate the maximum velocity fot distance to target. We don't want to be
+	//faster or braking will become an issue
+	//make this square to not need to calculate squareroot
+	float max_velocity_sq = (2 * acceleration * disttogo);
+
+	//need to decide from which direction we make our ramps
+	if (max_velocity_sq >= 0) {
+		//forward direction
+	    if (max_velocity_sq >= velocity*velocity) {
+	        //accelerate
+	        if (velocity < velocity_max) {
+	        	velocity += acceleration;
+	        }
+	    } else {
+	        //de-accelerate
+			if (velocity > 0) {
+				velocity -= acceleration;
+			} else {
+				velocity = 0;
+			}
+	    }
+	} else {
+		//backward direction
+		if (-max_velocity_sq >= velocity*velocity) {
+			//accelerate (reverse direction)
+			if (velocity > -velocity_max) {
+				velocity -= acceleration;
+			}
+		} else {
+			//de-accelerate (reverse direction)
+			if (velocity < 0) {
+				velocity += acceleration;
+			} else {
+				velocity = 0;
+			}
+		}
+	}
+    angle_target_smooth += velocity;
+
+
+	int32_t error = angle_target_smooth - adc_dma_results[0];
 	integrator += error;
 	if (integrator > integrator_max) {
 		integrator = integrator_max;
