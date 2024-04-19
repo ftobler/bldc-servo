@@ -1,0 +1,15 @@
+[
+    {"id": 100,        "name":"mode",           "min":0,       "max": 2,          "default": 1,          "comment": "off=0 | pos_control=1 | pwm_control=2 | speed_control=3"},
+    {"id": 101,        "name":"error",          "min":0,       "max": 255,        "default": 0,          "comment": "tracking error"},
+    {"id": 102,        "name":"commutation",    "min":0,       "max": 255,        "default": 0,          "comment": "current commutation value"},
+    {"id": 103,        "name":"pwm",            "min":-1550,   "max": 1550,       "default": 0,          "comment": "current pwm value"},
+    {"id": 104,        "name":"position",       "min":0,       "max": 65535,      "default": 0,          "comment": "current position"},
+    {"id": 105,        "name":"speed",          "min":0,       "max": 65535,      "default": 0,          "comment": "current speed on internal slope tracking"},
+    {"id": 106,        "name":"target",         "min":0,       "max": 65535,      "default": 0,          "comment": "positional target"},
+    {"id": 107,        "name":"speedmax",       "min":0,       "max": 65535,      "default": 180,        "comment": "max speed setting (0.001x)"},
+    {"id": 108,        "name":"acceleration",   "min":0,       "max": 65535,      "default": 10,         "comment": "max acceleration setting (0.001x)"},
+    {"id": 109,        "name":"control_p",      "min":0,       "max": 300,        "default": 12,         "comment": "control loop P"},
+    {"id": 110,        "name":"control_i",      "min":0,       "max": 300,        "default": 60,         "comment": "control loop I"},
+    {"id": 111,        "name":"i_windup",       "min":0,       "max": 1000,       "default": 5,          "comment": "control loop windup (1000x)"},
+    {"id": 112,        "name":"maxpwm",         "min":1,       "max": 1550,       "default": 1550,       "comment": "maximum pwm which is allowed (use for force limit)"}
+]

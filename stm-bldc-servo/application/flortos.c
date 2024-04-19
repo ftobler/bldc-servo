@@ -7,7 +7,7 @@
 
 #include "flortos.h"
 
-#include "stm32g0xx.h"
+#include "stm32_hal.h"
 
 
 #define USE_C_CODE_PEND_SV 0

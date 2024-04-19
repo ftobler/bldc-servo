@@ -5,8 +5,8 @@
  *      Author: ftobler
  */
 
-#ifndef STM32HAL_H_
-#define STM32HAL_H_
+#ifndef STM32_HAL_H_
+#define STM32_HAL_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,4 +19,4 @@ extern "C" {
 }
 #endif
 
-#endif /* STM32HAL_H_ */
+#endif /* STM32_HAL_H_ */
