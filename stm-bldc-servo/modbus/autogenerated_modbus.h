@@ -37,7 +37,7 @@ typedef struct {
     Database_limit_t speed; // current speed on internal slope tracking
     Database_limit_t target; // positional target
     Database_limit_t speedmax; // max speed setting (0.001x)
-    Database_limit_t acceleration; // max acceleration setting (0.001x)
+    Database_limit_t acceleration; // max acceleration setting (0.000001x)
     Database_limit_t control_p; // control loop P
     Database_limit_t control_i; // control loop I
     Database_limit_t i_windup; // control loop windup (1000x)
@@ -53,7 +53,7 @@ typedef struct {
     uint16_t speed; // current speed on internal slope tracking
     uint16_t target; // positional target
     uint16_t speedmax; // max speed setting (0.001x)
-    uint16_t acceleration; // max acceleration setting (0.001x)
+    uint16_t acceleration; // max acceleration setting (0.000001x)
     uint16_t control_p; // control loop P
     uint16_t control_i; // control loop I
     uint16_t i_windup; // control loop windup (1000x)

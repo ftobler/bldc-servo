@@ -7,7 +7,7 @@
     {"id": 105,        "name":"speed",          "min":0,       "max": 65535,      "default": 0,          "comment": "current speed on internal slope tracking"},
     {"id": 106,        "name":"target",         "min":0,       "max": 65535,      "default": 0,          "comment": "positional target"},
     {"id": 107,        "name":"speedmax",       "min":0,       "max": 65535,      "default": 180,        "comment": "max speed setting (0.001x)"},
-    {"id": 108,        "name":"acceleration",   "min":0,       "max": 65535,      "default": 10,         "comment": "max acceleration setting (0.001x)"},
+    {"id": 108,        "name":"acceleration",   "min":0,       "max": 65535,      "default": 100,        "comment": "max acceleration setting (0.000001x)"},
     {"id": 109,        "name":"control_p",      "min":0,       "max": 300,        "default": 12,         "comment": "control loop P"},
     {"id": 110,        "name":"control_i",      "min":0,       "max": 300,        "default": 60,         "comment": "control loop I"},
     {"id": 111,        "name":"i_windup",       "min":0,       "max": 1000,       "default": 5,          "comment": "control loop windup (1000x)"},

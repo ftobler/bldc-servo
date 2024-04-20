@@ -20,7 +20,7 @@ const Database_declaration_t database_declaration = {
     .speed            = {.address =  105, .minimum =     0, .maximum = 65535, .defaultvalue =     0}, // current speed on internal slope tracking
     .target           = {.address =  106, .minimum =     0, .maximum = 65535, .defaultvalue =     0}, // positional target
     .speedmax         = {.address =  107, .minimum =     0, .maximum = 65535, .defaultvalue =   180}, // max speed setting (0.001x)
-    .acceleration     = {.address =  108, .minimum =     0, .maximum = 65535, .defaultvalue =    10}, // max acceleration setting (0.001x)
+    .acceleration     = {.address =  108, .minimum =     0, .maximum = 65535, .defaultvalue =   100}, // max acceleration setting (0.000001x)
     .control_p        = {.address =  109, .minimum =     0, .maximum =   300, .defaultvalue =    12}, // control loop P
     .control_i        = {.address =  110, .minimum =     0, .maximum =   300, .defaultvalue =    60}, // control loop I
     .i_windup         = {.address =  111, .minimum =     0, .maximum =  1000, .defaultvalue =     5}, // control loop windup (1000x)
@@ -36,7 +36,7 @@ Database_value_t database_value = {
     .speed            =     0, // [105] current speed on internal slope tracking
     .target           =     0, // [106] positional target
     .speedmax         =   180, // [107] max speed setting (0.001x)
-    .acceleration     =    10, // [108] max acceleration setting (0.001x)
+    .acceleration     =   100, // [108] max acceleration setting (0.000001x)
     .control_p        =    12, // [109] control loop P
     .control_i        =    60, // [110] control loop I
     .i_windup         =     5, // [111] control loop windup (1000x)
