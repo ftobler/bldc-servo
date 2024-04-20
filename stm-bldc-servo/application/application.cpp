@@ -53,15 +53,16 @@ void application_setup() {
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 
-	htim3.Instance->CCR1 = 0;
-	htim3.Instance->CCR2 = 0;
-	htim3.Instance->CCR3 = 0;
-
-	SKIP_GPIO_Port->BSRR = SKIP_Pin;
+	htim3.Instance->CCR1 = PWM_MID;
+	htim3.Instance->CCR2 = PWM_MID;
+	htim3.Instance->CCR3 = PWM_MID;
 
 	HAL_ADC_Start_DMA(&hadc1, adc_dma_results, 1);
 
-	scheduler_task_sleep(20);
+	scheduler_task_sleep(300); //wait for power to be more stable
+
+	//switch SKIP pin, this will enable the drivers from Diode mode to PWM mode
+	SKIP_GPIO_Port->BSRR = SKIP_Pin;
 	angle_target_smooth = as5600_angle;
 }
 
@@ -150,10 +151,10 @@ __attribute__((optimize("Ofast"))) void application_loop() {
 
 __attribute__((optimize("Ofast"))) void control_loop() {
 	//calculate the distance to target position
-	int32_t angle_target = database_value.target;
+	int32_t angle_target = (int16_t)database_value.target;
 	float disttogo = angle_target - angle_target_smooth;
 
-	float acceleration = database_value.acceleration / 1000.0f;
+	float acceleration = database_value.acceleration / 1000000.0f;
 	float velocity_max = database_value.speedmax / 1000.0f;
 
 
