@@ -35,9 +35,9 @@ uint32_t enable_automatic = 0;
 void taskmanager_init() {
 	scheduler_init();
 	scheduler_addTask(TASK_ID_IDLE, idle_task_fn, stack_idle_task, STD_STACK_SIZE); //lowest priority
-	scheduler_addTask(TASK_ID_APPLICATION, application_task_fn, stack_application_task, STD_STACK_SIZE);
 	scheduler_addTask(TASK_ID_PROTOCOL, protocol_task_fn, stack_protocol_task, STD_STACK_SIZE);
-	scheduler_addTask(TASK_ID_CONTROLLER, controller_task_fn, stack_controller_task, STD_STACK_SIZE); //highest priority
+	scheduler_addTask(TASK_ID_APPLICATION, application_task_fn, stack_application_task, STD_STACK_SIZE); //highest priority
+//	scheduler_addTask(TASK_ID_CONTROLLER, controller_task_fn, stack_controller_task, STD_STACK_SIZE); //highest priority
 	scheduler_join();
 }
 
