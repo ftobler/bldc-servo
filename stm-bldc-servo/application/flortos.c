@@ -110,7 +110,7 @@ void scheduler_event_set(uint32_t id, uint32_t eventSetMask) {
 }
 
 
-static void scheduler_work() {
+__attribute__((optimize("O0"))) static void scheduler_work() {
 	uint32_t id = highestTask;
 	SchedulerTask_t* task = &tasks[id];
 	//go through every task id, starting from the highest priority task
