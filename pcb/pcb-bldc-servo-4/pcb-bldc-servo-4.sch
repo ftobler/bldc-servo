@@ -20089,7 +20089,7 @@ Source: www.rsonline.de .. SMBJ12/C/15/C/24/C/30/C/5.0/C/7.5/C Voltage Suppresso
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C15" library="passives" deviceset="CAPACITOR" device="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="10n"/>
 <part name="GND20" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="U6" library="ftobler" deviceset="LDO" device="-HT71XX" package3d_urn="urn:adsk.eagle:package:36804013/2"/>
+<part name="U6" library="ftobler" deviceset="LDO" device="-HT71XX" package3d_urn="urn:adsk.eagle:package:36804013/2" value="HT7150"/>
 <part name="C3" library="passives" deviceset="CAPACITOR" device="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="100n"/>
 <part name="C4" library="passives" deviceset="CAPACITOR" device="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="100n"/>
 <part name="C5" library="passives" deviceset="CAPACITOR" device="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="1u"/>
@@ -20154,7 +20154,7 @@ Source: www.rsonline.de .. SMBJ12/C/15/C/24/C/30/C/5.0/C/7.5/C Voltage Suppresso
 <part name="D4" library="ftobler" deviceset="LED" device="-0805" package3d_urn="urn:adsk.eagle:package:36806138/4"/>
 <part name="R6" library="passives" deviceset="RESISTOR" device="0603_RES" package3d_urn="urn:adsk.eagle:package:36812383/4" value="10k"/>
 <part name="GND30" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="U7" library="ftobler" deviceset="LDO" device="-23" package3d_urn="urn:adsk.eagle:package:36806100/2" value="LDO-23"/>
+<part name="U7" library="ftobler" deviceset="LDO" device="-23" package3d_urn="urn:adsk.eagle:package:36806100/2" value="HX7133"/>
 <part name="C21" library="passives" deviceset="CAPACITOR" device="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="100n"/>
 <part name="C22" library="passives" deviceset="CAPACITOR" device="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="100n"/>
 <part name="C23" library="passives" deviceset="CAPACITOR" device="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="1u"/>

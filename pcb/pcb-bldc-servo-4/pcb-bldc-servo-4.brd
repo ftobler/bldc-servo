@@ -226,7 +226,7 @@
 <text x="16.83" y="0.25" size="1" layer="33" font="vector" align="bottom-center">C</text>
 <text x="15.39" y="2.55" size="1" layer="34" font="vector" rot="MR0" align="bottom-center">3</text>
 <text x="14.29" y="0.25" size="1" layer="33" font="vector" align="bottom-center">3</text>
-<text x="15.38" y="4.4" size="0.5" layer="29" font="vector" ratio="15" distance="30" rot="R80">GND</text>
+<text x="19.2" y="4.73" size="0.5" layer="29" font="vector" ratio="15" distance="30" rot="R170">GND</text>
 <text x="13.53" y="0.3" size="0.5" layer="29" font="vector" ratio="15" distance="30" rot="R80">D5</text>
 <text x="28.13" y="0.15" size="0.5" layer="29" font="vector" ratio="15" distance="30" rot="R80">D6</text>
 <text x="4.83" y="1.25" size="0.5" layer="29" font="vector" ratio="15" distance="30" rot="R80">V4</text>
@@ -4551,7 +4551,7 @@ design rules under a new name.</description>
 <element name="C15" library="passives" package="0603_CAP" package3d_urn="urn:adsk.eagle:package:36813215/3" value="10n" x="29.65" y="11.9" smashed="yes" rot="R90">
 <attribute name="NAME" x="28.888" y="11.9" size="1.016" layer="25" font="vector" ratio="12" rot="R90" align="bottom-center"/>
 </element>
-<element name="U6" library="ftobler" package="SOT-89" package3d_urn="urn:adsk.eagle:package:36804013/2" value="LDO-HT71XX" x="18.301" y="11.619" smashed="yes">
+<element name="U6" library="ftobler" package="SOT-89" package3d_urn="urn:adsk.eagle:package:36804013/2" value="HT7150" x="18.301" y="11.619" smashed="yes">
 <attribute name="NAME" x="15.761" y="14.794" size="0.889" layer="25"/>
 <attribute name="VALUE" x="15.8959" y="7.2741" size="0.889" layer="27"/>
 </element>
@@ -4657,7 +4657,7 @@ design rules under a new name.</description>
 <element name="R6" library="passives" package="0603-RES" package3d_urn="urn:adsk.eagle:package:36812383/4" value="10k" x="15.25" y="5.7" smashed="yes" rot="R270">
 <attribute name="NAME" x="16.012" y="5.7" size="1.016" layer="25" font="vector" ratio="12" rot="R270" align="bottom-center"/>
 </element>
-<element name="U7" library="ftobler" package="SOT-23" package3d_urn="urn:adsk.eagle:package:36806100/2" value="LDO-23" x="16.65" y="18.9" smashed="yes" rot="R90">
+<element name="U7" library="ftobler" package="SOT-23" package3d_urn="urn:adsk.eagle:package:36806100/2" value="HX7133" x="16.65" y="18.9" smashed="yes" rot="R90">
 <attribute name="NAME" x="13.475" y="16.36" size="0.889" layer="25" rot="R90"/>
 <attribute name="VALUE" x="20.9949" y="16.4949" size="0.889" layer="27" rot="R90"/>
 </element>
@@ -5356,12 +5356,12 @@ design rules under a new name.</description>
 <wire x1="20.925" y1="8.625" x2="20.75" y2="8.45" width="0.15" layer="1"/>
 <wire x1="20.75" y1="8.45" x2="20.75" y2="6" width="0.15" layer="1"/>
 <wire x1="20.75" y1="6" x2="19.95" y2="5.2" width="0.15" layer="1"/>
-<wire x1="19.1571125" y1="5.2" x2="18.6571125" y2="4.7" width="0.15" layer="1"/>
-<wire x1="19.95" y1="5.2" x2="19.1571125" y2="5.2" width="0.15" layer="1"/>
+<wire x1="17.9571125" y1="5.2" x2="17.4571125" y2="4.7" width="0.15" layer="1"/>
+<wire x1="19.95" y1="5.2" x2="17.9571125" y2="5.2" width="0.15" layer="1"/>
 <wire x1="16.15" y1="3.2818" x2="15.8432" y2="2.975" width="0.15" layer="1"/>
 <wire x1="14.6568" y1="2.975" x2="14.525" y2="3.1068" width="0.15" layer="1"/>
 <wire x1="14.525" y1="4.05" x2="13.85" y2="4.725" width="0.15" layer="1"/>
-<wire x1="18.6571125" y1="4.7" x2="16.5" y2="4.7" width="0.15" layer="1"/>
+<wire x1="17.4571125" y1="4.7" x2="16.5" y2="4.7" width="0.15" layer="1"/>
 <wire x1="16.5" y1="4.7" x2="16.15" y2="4.35" width="0.15" layer="1"/>
 <wire x1="16.15" y1="4.35" x2="16.15" y2="3.2818" width="0.15" layer="1"/>
 <wire x1="15.8432" y1="2.975" x2="14.6568" y2="2.975" width="0.15" layer="1"/>
@@ -5760,8 +5760,6 @@ design rules under a new name.</description>
 <approved hash="21,19,3fd93ddb3ddb3fd9"/>
 <approved hash="21,19,3f233d213d213f23"/>
 <approved hash="21,19,214123bd2243de41"/>
-<approved hash="3,1,c5efa264f45793dc"/>
-<approved hash="3,16,7c2ddfda899b2a6c"/>
 </errors>
 </board>
 </drawing>
